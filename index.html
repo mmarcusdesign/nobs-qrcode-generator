@@ -137,13 +137,15 @@
             border: 1px solid #4b5563;
         }
         .qr-display-container {
-            /* VISUAL SIZE: Display QR code smaller (320px) on the screen */
-            width: 320px;
-            height: 320px;
+            /* VISUAL SIZE: Display QR code smaller on the screen (Fluid width for mobile) */
+            width: 90%; /* Fluid width: takes 90% of parent's width on mobile */
+            max-width: 320px; /* Max size on larger screens */
+            height: auto; /* Height is determined by the aspect ratio */
+            aspect-ratio: 1 / 1; /* Forces the container to be square */
             margin: 1.5rem auto 2rem; /* Center QR image */
             position: relative;
         }
-        /* Crucial CSS to scale the 1000px canvas down to fit the 320px container */
+        /* Crucial CSS to scale the 1000px canvas down to fit the container */
         .qr-display-container canvas {
             width: 100% !important;
             height: 100% !important;
