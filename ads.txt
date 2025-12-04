@@ -1,0 +1,4 @@
+﻿https://www.google.com/search?q=google.com, pub-6968638218347471, DIRECT, f08c47fec0942fa0
+IMPORTANT: This file is now complete and includes your unique Google AdSense Publisher ID.
+It MUST be uploaded to the root directory of your website (alongside your index.html file).
+Access URL for verification: https://www.google.com/url?sa=E&source=gmail&q=https://www.simpleqrmaker.net/ads.txt
