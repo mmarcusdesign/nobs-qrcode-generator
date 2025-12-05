@@ -357,4 +357,279 @@
         <div class="space-x-4">
             <!-- Ensure these links are live and work! -->
             <a href="privacy_policy.html" class="underline hover:text-gray-300 transition-colors duration-200">Privacy Policy</a>
-            <a href="terms_of_service.html" class="underline hover:text-gray-30
+            <a href="terms_of_service.html" class="underline hover:text-gray-300 transition-colors duration-200">Terms of Service</a>
+        </div>
+    </footer>
+
+
+    <script>
+        // Global variables for QR code instances
+        let qrCodeWhite = null;
+        let qrCodeBlack = null;
+        // Updated constant for QR code dimension: 1000 pixels for high-quality downloads.
+        const QR_DIMENSION = 1000; 
+
+        const generateButton = document.getElementById('generateButton');
+        const messageArea = document.getElementById('messageArea');
+        const displaySection = document.getElementById('qrCodeDisplay');
+        const qrWhiteDiv = document.getElementById('qrcode-white');
+        const qrBlackDiv = document.getElementById('qrcode-black');
+
+        /**
+         * Toggles the visibility of the content wrapper for the FAQ/Guide section.
+         * Uses CSS max-height transition for a smooth visual effect.
+         */
+        function toggleContent() {
+            const wrapper = document.getElementById('contentWrapper');
+            const button = document.getElementById('toggleContentButton');
+            
+            if (wrapper.classList.contains('is-open')) {
+                // Hide content
+                wrapper.classList.remove('is-open');
+                button.textContent = 'Read Our Guide & FAQ (Show Content)';
+            } else {
+                // Show content
+                wrapper.classList.add('is-open');
+                button.textContent = 'Hide Guide & FAQ';
+            }
+        }
+
+
+        /**
+         * Debounce function to limit how often generateQrCode is called while typing.
+         * It also updates the button state to indicate processing is happening.
+         */
+        const debounce = (func, delay) => {
+            let timeoutId;
+            return function(...args) {
+                // IMMEDIATE ACTION: User is typing, show generating/processing status
+                generateButton.disabled = true;
+                generateButton.textContent = 'Processing...';
+
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    func.apply(this, args);
+                }, delay);
+            };
+        };
+
+        // Helper to update the message box style
+        function updateMessage(text, isError = false) {
+            messageArea.textContent = isError ? 'Error: ' + text : text;
+            messageArea.style.color = isError ? '#dc2626' : '#4b5563'; // Tailwind Red-600 vs Gray-600
+        }
+
+        function validateInput(url) {
+            return url && url.trim().length > 3;
+        }
+
+        // Main function to generate the QR codes
+        function generateQrCode() {
+            const urlInput = document.getElementById('urlInput');
+            const url = urlInput.value.trim();
+
+            if (!validateInput(url)) {
+                // This branch should ideally only be hit if debouncedGenerate was bypassed
+                updateMessage('Please enter a valid link or text to generate.', true);
+                displaySection.classList.add('hidden');
+                generateButton.disabled = true;
+                generateButton.textContent = 'Enter Content';
+                return;
+            }
+
+            updateMessage('QR Codes generated successfully. Choose your download format.');
+
+            // Reset previous instances and containers
+            if (qrCodeWhite) qrCodeWhite.clear();
+            if (qrCodeBlack) qrCodeBlack.clear();
+            qrWhiteDiv.innerHTML = '';
+            qrBlackDiv.innerHTML = '';
+            
+            // 1. QR Code on White Background (Standard Contrast)
+            qrCodeWhite = new QRCode(qrWhiteDiv, {
+                text: url,
+                width: QR_DIMENSION, 
+                height: QR_DIMENSION, 
+                colorDark : "#000000", // Black dots
+                colorLight : "#ffffff", // White background
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
+            // 2. QR Code on Black Background (Inverted/Reverse Contrast)
+            qrCodeBlack = new QRCode(qrBlackDiv, {
+                text: url,
+                width: QR_DIMENSION, 
+                height: QR_DIMENSION, 
+                colorDark : "#ffffff", // White dots
+                colorLight : "#000000", // Black background
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
+            // Display the results and update button state after generation
+            displaySection.classList.remove('hidden');
+            generateButton.disabled = false;
+            generateButton.textContent = 'Ready';
+        }
+
+        // Debounced function called on input change
+        const debouncedGenerate = debounce(() => {
+            const url = document.getElementById('urlInput').value.trim();
+            if (validateInput(url)) {
+                // If input is valid, proceed to generation
+                generateQrCode(); 
+            } else {
+                // If input is invalid, set button state immediately to reflect need for input
+                generateButton.disabled = true;
+                generateButton.textContent = 'Enter Content'; 
+                displaySection.classList.add('hidden');
+                updateMessage('Enter your URL or text above to generate your custom QR code.', false);
+            }
+        }, 500); // Wait 500ms after user stops typing
+
+        /**
+         * Utility function to convert a Data URL (base64 image data) into a Blob object.
+         * This is necessary to use URL.createObjectURL() for more reliable downloads.
+         */
+        function dataURLtoBlob(dataurl) {
+            const parts = dataurl.split(',');
+            const mime = parts[0].match(/:(.*?);/)[1];
+            const bstr = atob(parts[1]);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            while(n--){
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new Blob([u8arr], {type:mime});
+        }
+
+
+        /**
+         * Utility function to trigger the download.
+         */
+        function downloadFile(dataUrl, filename, revokeUrl = false) {
+            console.log(`Attempting to download: ${filename}`); 
+            const a = document.createElement('a');
+            a.href = dataUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            
+            // Trigger the click
+            a.click();
+            document.body.removeChild(a);
+
+            if (revokeUrl) {
+                // IMPORTANT: Revoke temporary URL created from Blob to prevent memory leaks
+                URL.revokeObjectURL(dataUrl); 
+            }
+        }
+
+        /**
+         * Generates an SVG string based on the data in the QR code's canvas.
+         */
+        function generateSvgData(type) {
+            const qrDiv = document.getElementById(`qrcode-${type}`);
+            const canvas = qrDiv.querySelector('canvas');
+
+            if (!canvas) {
+                updateMessage('Canvas element not found. Please generate the QR code first.', true);
+                return null;
+            }
+
+            const ctx = canvas.getContext('2d');
+            const size = canvas.width;
+            const imageData = ctx.getImageData(0, 0, size, size); 
+            const data = imageData.data;
+            
+            // Determine colors for the output SVG
+            const darkColor = type === 'white' ? '#000000' : '#FFFFFF';
+            const lightColor = type === 'white' ? '#FFFFFF' : '#000000';
+
+            const moduleSize = 1; 
+            let svgRects = [];
+            
+            // Iterate over all pixels (modules)
+            for (let y = 0; y < size; y += moduleSize) {
+                for (let x = 0; x < size; x += moduleSize) {
+                    const index = (y * size + x) * 4;
+                    // Check if the pixel is dark
+                    const isDark = data[index] < 128; 
+                    
+                    if (isDark) {
+                        // Draw a rectangle using the appropriate 'dark' color
+                        svgRects.push(`<rect x="${x}" y="${y}" width="${moduleSize}" height="${moduleSize}" fill="${darkColor}" />`);
+                    }
+                }
+            }
+            
+            // Build the final SVG string
+            const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="100%" height="100%" style="background-color: ${lightColor};">
+                ${svgRects.join('\n')}
+            </svg>`;
+            
+            return svgString;
+        }
+
+        /**
+         * Function to handle image (PNG/JPG) and vector (SVG/EPS) downloads.
+         */
+        function downloadCode(format, type) {
+            const url = document.getElementById('urlInput').value.trim();
+            if (!validateInput(url)) {
+                updateMessage('Cannot export empty content. Please generate a QR code first.', true);
+                return;
+            }
+
+            // Create a clean filename
+            const baseFilename = type + '-qrcode-' + url.substring(0, 15).replace(/[^a-zA-Z0-9]/g, '_');
+
+            if (format === 'svg') {
+                // SVG (Vector) Logic - Always high quality and resolution independent
+                const svgString = generateSvgData(type);
+                if (svgString) {
+                    const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+                    const dataUrl = URL.createObjectURL(blob);
+                    downloadFile(dataUrl, baseFilename + '.svg', true); 
+                    updateMessage(`${type.toUpperCase()} EPS/Vector Export Successful.`, false);
+                }
+            } else {
+                // PNG/JPG Logic - Uses the 1000x1000 canvas resolution
+                const qrDiv = document.getElementById(`qrcode-${type}`);
+                const canvasElement = qrDiv.querySelector('canvas'); 
+
+                if (canvasElement) {
+                    let mimeType = format === 'png' ? 'image/png' : 'image/jpeg';
+                    let extension = format === 'png' ? '.png' : '.jpg';
+                    
+                    // 1. Get the Data URL from the canvas (now 1000x1000)
+                    const dataUrl = canvasElement.toDataURL(mimeType, format === 'jpg' ? 0.9 : 1.0);
+                    
+                    // 2. Convert Data URL to a safe Blob object
+                    const blob = dataURLtoBlob(dataUrl);
+
+                    // 3. Create a safe Object URL from the Blob
+                    const objectUrl = URL.createObjectURL(blob);
+
+                    // 4. Trigger download and ensure the temporary URL is revoked
+                    downloadFile(objectUrl, baseFilename + extension, true); 
+                    updateMessage(`${type.toUpperCase()} ${format.toUpperCase()} Export Successful.`, false);
+
+                } else {
+                    console.error(`Download error: Canvas not found for type ${type} and format ${format}.`);
+                    updateMessage(`Failed to find QR code image. Please click 'Generate' first.`, true);
+                }
+            }
+        }
+
+        // Initialize the app on load
+        window.onload = function() {
+            // Set initial value as per the image for a quick start
+            document.getElementById('urlInput').value = 'http://www.google.com/';
+            
+            // Automatically generate the initial QR code and enable the button
+            // The debouncedGenerate function will now handle setting the button text to 'Ready'
+            debouncedGenerate(); 
+        };
+
+    </script>
+</body>
+</html>
