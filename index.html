@@ -4,47 +4,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>NO B.S. QR Code Generator | Simple, Fast, and Free</title>
-    <meta name="description" content="The NO B.S. QR Code Generator. Create simple QR Codes instantly without needing an account. Download PNG, JPG, and Vector (EPS/SVG) formats.">
+    <title>AuroHue | QR Code Generator</title>
+    <meta name="description" content="The NO B.S. QR Code Generator. Create simple QR Codes instantly without needing an account. Part of the AuroHue Design Tools suite.">
     
-    <!-- Import Roboto font from Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
-
-    <!-- Load Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- === GOOGLE ADSENSE SCRIPT === -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6968638218347471"
      crossorigin="anonymous"></script>
     
-    <!-- SEO Technical Fix -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'roboto': ['Roboto', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
     <link rel="canonical" href="https://www.simpleqrmaker.net/"> 
 
     <style>
-        /* --- CREATIVE GLASSMORPHISM THEME --- */
+        /* --- SHARED THEME VARIABLES --- */
         :root {
             --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --glass-bg: rgba(255, 255, 255, 0.92);
             --glass-border: rgba(255, 255, 255, 0.4);
             --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            
             --accent-color: #764ba2;
             --text-dark: #1a202c;
             --text-gray: #4a5568;
         }
 
         body {
-            background-image: var(--bg-gradient);
-            font-family: 'Roboto', sans-serif;
+            /* Use dark background from AuroHue header for consistency */
+            background-color: #0d1117; 
+            font-family: 'Roboto', var(--font-roboto), sans-serif;
             color: var(--text-dark);
             min-height: 100vh;
+            padding: 0; /* Remove padding so header touches the top */
+        }
+        
+        /* The main tool content wrapper to apply background and centering */
+        .tool-wrapper {
+            background-image: var(--bg-gradient);
             padding: 2rem 1rem;
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
         }
 
-        /* --- THE DASHBOARD CARD (The Tool) --- */
+        /* --- NAVIGATION --- */
+        .main-nav {
+            width: 100%;
+            max-width: 1100px;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.1); 
+            padding: 0.5rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .main-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.6rem 1.25rem;
+            border-radius: 9999px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+            position: relative;
+            white-space: nowrap;
+        }
+        .main-nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .main-nav a.active {
+            background: white;
+            color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* --- THE DASHBOARD CARD --- */
         .dashboard-card {
             background: var(--glass-bg);
             backdrop-filter: blur(8px);
@@ -52,22 +106,18 @@
             border-radius: 24px;
             box-shadow: var(--glass-shadow);
             width: 100%;
-            max-width: 1100px; /* Wide format */
-            padding: 0; /* Padding handled by internal grid */
+            max-width: 1100px;
+            padding: 0;
             overflow: hidden;
             display: grid;
-            grid-template-columns: 1fr; /* Mobile Default */
+            grid-template-columns: 1fr;
             margin-bottom: 2rem;
         }
 
-        /* Desktop Layout: Side-by-Side */
         @media (min-width: 1024px) {
-            .dashboard-card {
-                grid-template-columns: 1fr 1fr; /* Split 50/50 */
-            }
+            .dashboard-card { grid-template-columns: 1fr 1fr; }
         }
 
-        /* LEFT PANEL: Input & Branding */
         .panel-left {
             padding: 3rem;
             display: flex;
@@ -76,13 +126,9 @@
             border-bottom: 1px solid #e2e8f0;
         }
         @media (min-width: 1024px) {
-            .panel-left {
-                border-bottom: none;
-                border-right: 1px solid #e2e8f0;
-            }
+            .panel-left { border-bottom: none; border-right: 1px solid #e2e8f0; }
         }
 
-        /* RIGHT PANEL: The Visual Result */
         .panel-right {
             background-color: #f7fafc;
             padding: 3rem;
@@ -92,7 +138,6 @@
             justify-content: center;
         }
 
-        /* --- UI ELEMENTS --- */
         .no-bs-badge {
             background: var(--accent-color);
             color: white;
@@ -105,7 +150,7 @@
             letter-spacing: 0.05em;
         }
 
-        h1 {
+        h1.tool-title { /* Specific class for tool title */
             font-size: 2.5rem;
             font-weight: 900;
             line-height: 1.1;
@@ -114,16 +159,11 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
-        .input-group {
-            position: relative;
-            margin-top: 2rem;
-        }
-
+        /* ... (rest of CSS remains the same) ... */
         .fancy-input {
             width: 100%;
             padding: 1.25rem 1.5rem;
-            padding-right: 100px; /* Space for status */
+            padding-right: 100px;
             border-radius: 16px;
             border: 2px solid #e2e8f0;
             background: white;
@@ -137,7 +177,6 @@
             outline: none;
         }
 
-        /* Status Indicator (Nested) */
         .status-pill {
             position: absolute;
             right: 12px;
@@ -153,20 +192,9 @@
             cursor: default;
             transition: all 0.3s;
         }
-        .status-pill.ready {
-            background: #c6f6d5;
-            color: #276749;
-            cursor: pointer;
-        }
+        .status-pill.ready { background: #c6f6d5; color: #276749; cursor: pointer; }
 
-        /* QR Preview Container */
-        .preview-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            width: 100%;
-        }
-        
+        .preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; width: 100%; }
         .preview-card {
             background: white;
             border-radius: 16px;
@@ -175,27 +203,17 @@
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
             transition: transform 0.2s;
         }
-        .preview-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-        }
-        .preview-card.dark {
-            background: #1a202c;
-            color: white;
-        }
+        .preview-card.dark { background: #1a202c; color: white; }
 
         .qr-canvas-wrapper {
             width: 100%;
             aspect-ratio: 1/1;
             margin: 1rem 0;
-            background: white; /* Ensure dark QR has white canvas background */
+            background: white;
             border-radius: 8px;
             overflow: hidden;
         }
-        .qr-canvas-wrapper canvas {
-            width: 100% !important;
-            height: 100% !important;
-        }
+        .qr-canvas-wrapper canvas { width: 100% !important; height: 100% !important; }
 
         .download-btn {
             display: block;
@@ -209,25 +227,12 @@
             transition: all 0.2s;
             cursor: pointer;
         }
-        /* Light Card Buttons */
-        .light .download-btn {
-            border-color: #e2e8f0;
-            color: #4a5568;
-            background: white;
-        }
+        .light .download-btn { border-color: #e2e8f0; color: #4a5568; background: white; }
         .light .download-btn:hover { background: #f7fafc; border-color: #cbd5e0; }
-        
-        /* Dark Card Buttons */
-        .dark .download-btn {
-            border-color: #4a5568;
-            color: #e2e8f0;
-            background: transparent;
-        }
+        .dark .download-btn { border-color: #4a5568; color: #e2e8f0; background: transparent; }
         .dark .download-btn:hover { background: #2d3748; border-color: #718096; }
 
-
-        /* --- CONTENT SECTION (Feature Grid) --- */
-        /* Designed to look like "Features" but acts as SEO content */
+        /* --- CONTENT SECTION --- */
         .content-grid {
             max-width: 1100px;
             width: 100%;
@@ -236,15 +241,11 @@
             gap: 2rem;
             margin-top: 1rem;
         }
-        @media (min-width: 768px) {
-            .content-grid { grid-template-columns: 1fr 1fr; }
-        }
-        @media (min-width: 1024px) {
-            .content-grid { grid-template-columns: 1fr 1fr 1fr; }
-        }
+        @media (min-width: 768px) { .content-grid { grid-template-columns: 1fr 1fr; } }
+        @media (min-width: 1024px) { .content-grid { grid-template-columns: 1fr 1fr 1fr; } }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 16px;
             padding: 2rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
@@ -261,7 +262,6 @@
             color: var(--text-gray);
             margin-bottom: 0.5rem;
         }
-        .feature-card ul { padding-left: 1rem; list-style-type: disc; }
 
         footer {
             margin-top: 3rem;
@@ -272,118 +272,120 @@
         }
         footer a { text-decoration: underline; }
 
-        /* Mobile Adjustments */
         @media (max-width: 640px) {
             .preview-grid { grid-template-columns: 1fr; }
-            h1 { font-size: 2rem; }
+            h1.tool-title { font-size: 2rem; }
             .panel-left, .panel-right { padding: 1.5rem; }
+            .main-nav { padding: 0.5rem; border-radius: 12px; }
+            .main-nav a { padding: 0.5rem 1rem; font-size: 0.85rem; }
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
-    <!-- MAIN DASHBOARD CARD -->
-    <!-- Tool is compact and side-by-side on desktop to pull content up -->
-    <main class="dashboard-card">
-        
-        <!-- Left Panel: Input & Branding -->
-        <div class="panel-left">
-            <div>
-                <span class="no-bs-badge">NO B.S.</span>
-                <h1>QR Code Generator</h1>
-                <p class="text-lg text-gray-600">The fastest, simplest, and most private way to generate codes instantly.</p>
-            </div>
-
-            <div class="input-group">
-                <input type="text" id="urlInput" placeholder="Enter URL, Email, or Phone..." value="http://www.google.com/"
-                       class="fancy-input"
-                       oninput="debouncedGenerate()">
-                
-                <div id="statusIndicator" onclick="generateQrCode()" class="status-pill" data-status="ready">
-                    Ready
-                </div>
-            </div>
-            
-            <div id="hintArea" class="mt-3 text-sm font-medium text-gray-500 h-6"></div>
-        </div>
-
-        <!-- Right Panel: The Visual Result -->
-        <div class="panel-right">
-            <div id="qrCodeDisplay" class="preview-grid hidden">
-                
-                <!-- Light Version -->
-                <div class="preview-card light">
-                    <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Standard</span>
-                    <div id="qrcode-white" class="qr-canvas-wrapper"></div>
-                    <button onclick="downloadCode('png', 'white')" class="download-btn">PNG</button>
-                    <button onclick="downloadCode('jpg', 'white')" class="download-btn">JPG</button>
-                    <button onclick="downloadCode('svg', 'white')" class="download-btn">Vector (SVG)</button>
-                </div>
-
-                <!-- Dark Version -->
-                <div class="preview-card dark">
-                    <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Dark Mode</span>
-                    <div id="qrcode-black" class="qr-canvas-wrapper bg-black"></div>
-                    <button onclick="downloadCode('png', 'black')" class="download-btn">PNG</button>
-                    <button onclick="downloadCode('jpg', 'black')" class="download-btn">JPG</button>
-                    <button onclick="downloadCode('svg', 'black')" class="download-btn">Vector (SVG)</button>
-                </div>
-
-            </div>
-            <div id="messageArea" class="text-center text-sm text-gray-500 mt-4 hidden"></div>
-        </div>
-    </main>
-
-    <!-- CONTENT GRID (Visible immediately below tool) -->
-    <!-- Styled as feature cards, but contains the rich text AdSense needs -->
-    <section class="content-grid">
-        
-        <!-- Card 1: The Mission -->
-        <article class="feature-card">
-            <h3>Why Use No B.S. QR?</h3>
-            <p>
-                We built this tool because most QR generators are annoying. They ask for your email, force you to sign up, or break your codes after a "free trial."
+    <!-- GLOBAL APPLICATION HEADER (AuroHue) -->
+    <div class="w-full pt-8 pb-4 px-4 bg-gray-900/90 backdrop-blur-md shadow-2xl rounded-b-3xl">
+        <div class="text-center max-w-7xl mx-auto">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-pink-400 to-amber-300 tracking-tight leading-tight mb-1">
+                AuroHue
+            </h1>
+            <p class="text-base sm:text-lg font-light text-gray-400 italic">
+                a designer's toolbox
             </p>
-            <p><strong>We don't do that.</strong> This tool runs entirely in your browser. We don't see your data, we don't track your links, and we don't charge you.</p>
-        </article>
-
-        <!-- Card 2: Use Cases -->
-        <article class="feature-card">
-            <h3>Popular Use Cases</h3>
-            <ul>
-                <li><strong>Business Cards:</strong> Link to your portfolio or LinkedIn.</li>
-                <li><strong>Wi-Fi Access:</strong> Let guests connect instantly.</li>
-                <li><strong>Packaging:</strong> Link to manuals or videos.</li>
-                <li><strong>Events:</strong> Check-ins and digital tickets.</li>
-            </ul>
-        </article>
-
-        <!-- Card 3: FAQ / Tech Specs -->
-        <article class="feature-card">
-            <h3>Troubleshooting & Tips</h3>
-            <ul>
-                <li><strong>Scanning Issues?</strong> Your URL might be too long. Try shortening it first.</li>
-                <li><strong>Privacy?</strong> 100% Client-side. Data never leaves your device.</li>
-                <li><strong>Format?</strong> Use PNG for web, EPS/Vector for professional print.</li>
-            </ul>
-        </article>
-
-    </section>
-
-    <footer>
-        <p>&copy; 2025 No B.S. QR Code Generator.</p>
-        <div class="mt-2">
-            <a href="privacy_policy.html">Privacy Policy</a> &nbsp;|&nbsp; 
-            <a href="terms_of_service.html">Terms of Service</a>
         </div>
-    </footer>
+    </div>
+    
+    <div class="tool-wrapper">
+
+        <!-- NAVIGATION -->
+        <header class="main-nav">
+            <a href="index.html" class="active">QR Generator</a>
+            <a href="colors.html">Color Palette</a>
+            <a href="ipsum.html">Lorem Ipsum</a>
+            <a href="ratio.html">Aspect Ratio</a>
+            <a href="guide.html">Guide</a>
+            <a href="faq.html">FAQ</a>
+        </header>
+
+        <!-- MAIN DASHBOARD CARD -->
+        <main class="dashboard-card">
+            <!-- Left Panel: Input & Branding -->
+            <div class="panel-left">
+                <div>
+                    <span class="no-bs-badge">NO B.S. TOOLS</span>
+                    <h1 class="tool-title">QR Code Generator</h1>
+                    <p class="text-lg text-gray-600">The fastest, simplest, and most private way to generate codes instantly.</p>
+                </div>
+
+                <div class="input-group" style="position: relative; margin-top: 2rem;">
+                    <input type="text" id="urlInput" placeholder="Enter URL, Email, or Phone..." value="http://www.google.com/"
+                           class="fancy-input"
+                           oninput="debouncedGenerate()">
+                    
+                    <div id="statusIndicator" onclick="generateQrCode()" class="status-pill" data-status="ready">
+                        Ready
+                    </div>
+                </div>
+                
+                <div id="hintArea" class="mt-3 text-sm font-medium text-gray-500 h-6"></div>
+            </div>
+
+            <!-- Right Panel: The Visual Result -->
+            <div class="panel-right">
+                <div id="qrCodeDisplay" class="preview-grid hidden">
+                    <div class="preview-card light">
+                        <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Standard</span>
+                        <div id="qrcode-white" class="qr-canvas-wrapper"></div>
+                        <button onclick="downloadCode('png', 'white')" class="download-btn">PNG</button>
+                        <button onclick="downloadCode('jpg', 'white')" class="download-btn">JPG</button>
+                        <button onclick="downloadCode('svg', 'white')" class="download-btn">SVG</button>
+                    </div>
+                    <div class="preview-card dark">
+                        <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Dark Mode</span>
+                        <div id="qrcode-black" class="qr-canvas-wrapper bg-black"></div>
+                        <button onclick="downloadCode('png', 'black')" class="download-btn">PNG</button>
+                        <button onclick="downloadCode('jpg', 'black')" class="download-btn">JPG</button>
+                        <button onclick="downloadCode('svg', 'black')" class="download-btn">SVG</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- CONTENT GRID -->
+        <section class="content-grid">
+            <article class="feature-card">
+                <h3>Why Use No B.S. QR?</h3>
+                <p>We built this tool because most QR generators are annoying. They ask for your email, force you to sign up, or break your codes after a "free trial."</p>
+                <p><strong>We don't do that.</strong> This tool runs entirely in your browser. We don't see your data, we don't track your links, and we don't charge you.</p>
+            </article>
+            <article class="feature-card">
+                <h3>Popular Use Cases</h3>
+                <ul>
+                    <li><strong>Business Cards:</strong> Link to your portfolio.</li>
+                    <li><strong>Wi-Fi Access:</strong> Let guests connect instantly.</li>
+                    <li><strong>Events:</strong> Check-ins and digital tickets.</li>
+                </ul>
+            </article>
+            <article class="feature-card">
+                <h3>Privacy First</h3>
+                <p>Because this tool uses client-side technology, your input data never leaves your device. It is not sent to our servers. It is the safest way to generate codes for sensitive information.</p>
+            </article>
+        </section>
+
+        <footer>
+            <p>&copy; 2025 AuroHue Design Tools.</p>
+            <div class="mt-2">
+                <a href="privacy_policy.html">Privacy Policy</a> &nbsp;|&nbsp; 
+                <a href="terms_of_service.html">Terms of Service</a> &nbsp;|&nbsp;
+                <a href="about.html">About Us</a>
+            </div>
+        </footer>
+    </div>
 
     <script>
-        // Constants & Elements
         const QR_DIMENSION = 1000; 
         const statusIndicator = document.getElementById('statusIndicator');
-        const messageArea = document.getElementById('messageArea');
         const hintArea = document.getElementById('hintArea');
         const displaySection = document.getElementById('qrCodeDisplay');
         const qrWhiteDiv = document.getElementById('qrcode-white');
@@ -391,7 +393,6 @@
         let qrCodeWhite = null;
         let qrCodeBlack = null;
 
-        // UI Helpers
         function setStatus(text, status) {
             statusIndicator.textContent = text;
             if (status === 'processing') {
@@ -403,20 +404,13 @@
             }
         }
 
-        function updateHint(text) {
-            hintArea.innerHTML = text;
-        }
-
-        // Logic Helpers
-        function validateInput(content) {
-            return content && content.trim().length > 0;
-        }
+        function updateHint(text) { hintArea.innerHTML = text; }
+        function validateInput(content) { return content && content.trim().length > 0; }
 
         function formatContent(rawContent) {
             const content = rawContent.trim();
             let finalContent = content;
             let hint = '';
-
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             const phoneRegex = /^(?:\+?\d{1,3}[\s-]?)?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}$/;
             const normalizedPhone = content.replace(/[\s()-]/g, ''); 
@@ -425,17 +419,16 @@
                 hint = 'Format: Standard Link/Text';
             } else if (emailRegex.test(content)) {
                 finalContent = `mailto:${content}`;
-                hint = 'Detected: <strong>Email</strong> (Auto-formatted to mailto:)';
+                hint = 'Detected: <strong>Email</strong> (Auto-formatted)';
             } else if (normalizedPhone.length >= 10 && phoneRegex.test(normalizedPhone)) {
                 finalContent = `tel:${normalizedPhone}`;
-                hint = 'Detected: <strong>Phone</strong> (Auto-formatted to tel:)';
+                hint = 'Detected: <strong>Phone</strong> (Auto-formatted)';
             } else {
                 hint = 'Format: Plain Text / URL';
             }
             return { content: finalContent, hint: hint };
         }
 
-        // Core Generation
         function generateQrCode() {
             const urlInput = document.getElementById('urlInput');
             const rawContent = urlInput.value.trim();
@@ -457,23 +450,11 @@
 
             try {
                 qrCodeWhite = new QRCode(qrWhiteDiv, {
-                    text: finalContent,
-                    width: QR_DIMENSION,
-                    height: QR_DIMENSION,
-                    colorDark : "#000000",
-                    colorLight : "#ffffff",
-                    correctLevel : QRCode.CorrectLevel.H
+                    text: finalContent, width: QR_DIMENSION, height: QR_DIMENSION, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H
                 });
-
                 qrCodeBlack = new QRCode(qrBlackDiv, {
-                    text: finalContent,
-                    width: QR_DIMENSION,
-                    height: QR_DIMENSION,
-                    colorDark : "#ffffff",
-                    colorLight : "#000000",
-                    correctLevel : QRCode.CorrectLevel.H
+                    text: finalContent, width: QR_DIMENSION, height: QR_DIMENSION, colorDark : "#ffffff", colorLight : "#000000", correctLevel : QRCode.CorrectLevel.H
                 });
-
                 displaySection.classList.remove('hidden');
                 setStatus('Ready', 'ready');
             } catch (e) {
@@ -482,7 +463,6 @@
             }
         }
 
-        // Debounce
         let timeoutId;
         const debouncedGenerate = () => {
             const val = document.getElementById('urlInput').value.trim();
@@ -490,28 +470,18 @@
                 setStatus('Working...', 'processing');
                 clearTimeout(timeoutId);
                 timeoutId = setTimeout(() => { generateQrCode(); }, 500);
-            } else {
-                generateQrCode(); 
-            }
+            } else { generateQrCode(); }
         };
 
-        // Download Logic
         function downloadFile(dataUrl, filename, revokeUrl = false) {
-            const a = document.createElement('a');
-            a.href = dataUrl;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            const a = document.createElement('a'); a.href = dataUrl; a.download = filename;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
             if (revokeUrl) URL.revokeObjectURL(dataUrl); 
         }
 
         function dataURLtoBlob(dataurl) {
-            const parts = dataurl.split(',');
-            const mime = parts[0].match(/:(.*?);/)[1];
-            const bstr = atob(parts[1]);
-            let n = bstr.length;
-            const u8arr = new Uint8Array(n);
+            const parts = dataurl.split(','); const mime = parts[0].match(/:(.*?);/)[1];
+            const bstr = atob(parts[1]); let n = bstr.length; const u8arr = new Uint8Array(n);
             while(n--){ u8arr[n] = bstr.charCodeAt(n); }
             return new Blob([u8arr], {type:mime});
         }
@@ -519,7 +489,6 @@
         function downloadCode(format, type) {
             const rawContent = document.getElementById('urlInput').value.trim();
             if (!validateInput(rawContent)) return;
-            
             const cleanName = rawContent.substring(0, 10).replace(/[^a-zA-Z0-9]/g, '_') || 'qrcode';
             const filename = `${type}-qr-${cleanName}`;
 
@@ -527,19 +496,15 @@
                 const qrDiv = document.getElementById(`qrcode-${type}`);
                 const canvas = qrDiv.querySelector('canvas');
                 if(!canvas) return;
-                
                 const size = canvas.width;
                 const ctx = canvas.getContext('2d');
                 const data = ctx.getImageData(0, 0, size, size).data;
                 const dark = type === 'white' ? '#000000' : '#FFFFFF';
                 const light = type === 'white' ? '#FFFFFF' : '#000000';
-                
                 let rects = [];
                 for(let y=0; y<size; y++) {
                     for(let x=0; x<size; x++) {
-                        if(data[(y*size+x)*4] < 128) {
-                            rects.push(`<rect x="${x}" y="${y}" width="1" height="1" fill="${dark}" />`);
-                        }
+                        if(data[(y*size+x)*4] < 128) { rects.push(`<rect x="${x}" y="${y}" width="1" height="1" fill="${dark}" />`); }
                     }
                 }
                 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" style="background:${light}">${rects.join('')}</svg>`;
@@ -554,7 +519,6 @@
                 downloadFile(URL.createObjectURL(blob), filename + '.' + format, true);
             }
         }
-
         window.onload = function() {
             document.getElementById('urlInput').value = 'http://www.google.com/';
             debouncedGenerate();
