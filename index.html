@@ -13,623 +13,552 @@
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- === GOOGLE ADSENSE SCRIPT: PASTE AD CODE HERE (Step 3 in Guide) === -->
+    <!-- === GOOGLE ADSENSE SCRIPT === -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6968638218347471"
      crossorigin="anonymous"></script>
     
-    <!-- SEO Technical Fix: Add Canonical URL for consistency. REPLACE simplesqrcodes.com with your actual domain -->
+    <!-- SEO Technical Fix -->
     <link rel="canonical" href="https://www.simpleqrmaker.net/"> 
 
     <style>
-        /* --- CUSTOM STYLES TO MATCH DESIGN --- */
+        /* --- CREATIVE GLASSMORPHISM THEME --- */
         :root {
-            /* Colors for the main background gradient */
-            --bg-start: #4A00B7; 
-            --bg-end: #0077FF; 
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.92);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
             
-            /* Colors for the main card */
-            --card-white: #ffffff;
-            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
-
-            /* Colors for the generate button and the NO B.S. pill */
-            --btn-generate-start: #6a11cb;
-            --btn-generate-end: #2575fc;
-
-            /* Colors for the download buttons (Orange/Gold) */
-            --btn-download-start: #ffc371; 
-            --btn-download-end: #ff852e; 
-            --btn-download-border: #f89d4d;
+            --accent-color: #764ba2;
+            --text-dark: #1a202c;
+            --text-gray: #4a5568;
         }
 
         body {
-            /* Gradient Background matching the design */
-            background-image: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
-            /* Updated font to Roboto */
+            background-image: var(--bg-gradient);
             font-family: 'Roboto', sans-serif;
-            color: #1f2937;
+            color: var(--text-dark);
+            min-height: 100vh;
+            padding: 2rem 1rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Aligned to the top */
-            min-height: 100vh;
-            padding: 1rem; 
         }
 
-        /* Main Card Container */
-        .design-card {
-            background-color: var(--card-white);
-            border-radius: 20px; 
-            box-shadow: var(--card-shadow);
-            padding: 2.5rem; 
-            max-width: 1024px; 
+        /* --- THE DASHBOARD CARD (The Tool) --- */
+        .dashboard-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: var(--glass-shadow);
             width: 100%;
-            margin-bottom: 2rem; /* Add space below the tool */
-        }
-
-        /* Input Field Styling */
-        .design-input {
-            border: 1px solid #d1d5db; 
-            border-radius: 12px; 
-            padding: 0.75rem 1rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .design-input:focus {
-            border-color: var(--btn-generate-start);
-            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2); 
-            outline: none;
-        }
-
-        /* NEW: Style for the "NO B.S." pill using the same gradient */
-        .btn-pill {
-            background-image: linear-gradient(to right, var(--btn-generate-start), var(--btn-generate-end));
-            box-shadow: 0 2px 8px rgba(37, 117, 252, 0.4);
-        }
-
-        /* Generate Button (Purple/Blue Gradient) */
-        .btn-generate {
-            background-image: linear-gradient(to right, var(--btn-generate-start), var(--btn-generate-end));
-            color: white;
-            font-weight: 600;
-            padding: 0.75rem 2rem;
-            border-radius: 12px; 
-            transition: opacity 0.2s, transform 0.1s;
-            box-shadow: 0 4px 10px rgba(37, 117, 252, 0.4);
-            border: none;
-        }
-        .btn-generate:hover:not(:disabled) {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-        .btn-generate:active:not(:disabled) {
-            box-shadow: none;
-            transform: translateY(1px);
-        }
-
-        /* Download Buttons (Orange/Gold Pill Shape) */
-        .btn-download-pill {
-            background-image: linear-gradient(180deg, var(--btn-download-start), var(--btn-download-end));
-            color: #333; 
-            font-weight: 600;
-            padding: 0.6rem 1rem;
-            border-radius: 9999px; 
-            border: 1px solid var(--btn-download-border);
-            width: 90%; 
-            max-width: 250px; 
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(255, 133, 46, 0.4);
-            transition: opacity 0.2s, transform 0.1s;
-        }
-        .btn-download-pill:hover:not(:disabled) {
-            opacity: 0.9;
-        }
-
-        /* QR Code Preview Card Styles */
-        .qr-preview-card {
-            border-radius: 12px;
-            padding: 2rem 1.5rem;
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-        }
-        .qr-preview-card.light {
-            background-color: white;
-            border: 1px solid #e5e7eb;
-        }
-        .qr-preview-card.dark {
-            background-color: #000000; 
-            color: white;
-            border: 1px solid #4b5563;
-        }
-        .qr-display-container {
-            width: 90%; 
-            max-width: 320px; 
-            height: auto; 
-            aspect-ratio: 1 / 1; 
-            margin: 1.5rem auto 2rem; 
-            position: relative;
-        }
-        .qr-display-container canvas {
-            width: 100% !important;
-            height: 100% !important;
-        }
-        
-        .qr-download-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center; 
-            gap: 0.75rem; 
-            margin-top: 1rem;
-        }
-
-        /* Content Section Styles (The content box itself) */
-        .content-section {
-            background-color: white;
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
-            max-width: 1024px; 
-            width: 100%;
-        }
-        .content-section h2 {
-            font-size: 1.875rem; 
-            font-weight: 700; 
-            margin-bottom: 1rem;
-            color: var(--bg-start);
-        }
-        .content-section h3 {
-             font-size: 1.5rem; 
-             font-weight: 600; 
-             margin-top: 1.5rem;
-             margin-bottom: 0.5rem;
-             color: #1f2937;
-        }
-        .content-section p {
-            margin-bottom: 1rem;
-            line-height: 1.6;
-            color: #4b5563;
-        }
-        .content-section ul {
-            margin-bottom: 1rem;
-            margin-left: 1.5rem;
-        }
-        
-        /* CSS for the collapsible wrapper transition */
-        #contentWrapper {
-            /* Use padding for visible height transition */
-            transition: all 0.3s ease-in-out;
-            max-height: 0;
+            max-width: 1100px; /* Wide format */
+            padding: 0; /* Padding handled by internal grid */
             overflow: hidden;
-            margin-bottom: 0; /* No margin when closed */
-        }
-
-        #contentWrapper.is-open {
-            /* Set to a large enough value to accommodate all content when open */
-            max-height: 3000px; 
+            display: grid;
+            grid-template-columns: 1fr; /* Mobile Default */
             margin-bottom: 2rem;
         }
 
-        /* Ensure the nested section has no fixed height */
-        #contentWrapper .content-section {
-            /* Ensure the inner content pushes the max-height limit when open */
+        /* Desktop Layout: Side-by-Side */
+        @media (min-width: 1024px) {
+            .dashboard-card {
+                grid-template-columns: 1fr 1fr; /* Split 50/50 */
+            }
+        }
+
+        /* LEFT PANEL: Input & Branding */
+        .panel-left {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        @media (min-width: 1024px) {
+            .panel-left {
+                border-bottom: none;
+                border-right: 1px solid #e2e8f0;
+            }
+        }
+
+        /* RIGHT PANEL: The Visual Result */
+        .panel-right {
+            background-color: #f7fafc;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- UI ELEMENTS --- */
+        .no-bs-badge {
+            background: var(--accent-color);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            display: inline-block;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: -webkit-linear-gradient(#667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .input-group {
+            position: relative;
             margin-top: 2rem;
         }
+
+        .fancy-input {
+            width: 100%;
+            padding: 1.25rem 1.5rem;
+            padding-right: 100px; /* Space for status */
+            border-radius: 16px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        .fancy-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(118, 75, 162, 0.1);
+            outline: none;
+        }
+
+        /* Status Indicator (Nested) */
+        .status-pill {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            background: #edf2f7;
+            color: #718096;
+            cursor: default;
+            transition: all 0.3s;
+        }
+        .status-pill.ready {
+            background: #c6f6d5;
+            color: #276749;
+            cursor: pointer;
+        }
+
+        /* QR Preview Container */
+        .preview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            width: 100%;
+        }
+        
+        .preview-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .preview-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        .preview-card.dark {
+            background: #1a202c;
+            color: white;
+        }
+
+        .qr-canvas-wrapper {
+            width: 100%;
+            aspect-ratio: 1/1;
+            margin: 1rem 0;
+            background: white; /* Ensure dark QR has white canvas background */
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .qr-canvas-wrapper canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 6px;
+            border: 1px solid;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        /* Light Card Buttons */
+        .light .download-btn {
+            border-color: #e2e8f0;
+            color: #4a5568;
+            background: white;
+        }
+        .light .download-btn:hover { background: #f7fafc; border-color: #cbd5e0; }
+        
+        /* Dark Card Buttons */
+        .dark .download-btn {
+            border-color: #4a5568;
+            color: #e2e8f0;
+            background: transparent;
+        }
+        .dark .download-btn:hover { background: #2d3748; border-color: #718096; }
+
+
+        /* --- CONTENT SECTION (Feature Grid) --- */
+        /* Designed to look like "Features" but acts as SEO content */
+        .content-grid {
+            max-width: 1100px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        @media (min-width: 768px) {
+            .content-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (min-width: 1024px) {
+            .content-grid { grid-template-columns: 1fr 1fr 1fr; }
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--accent-color);
+        }
+        .feature-card p, .feature-card li {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-gray);
+            margin-bottom: 0.5rem;
+        }
+        .feature-card ul { padding-left: 1rem; list-style-type: disc; }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: white;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        footer a { text-decoration: underline; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 640px) {
+            .preview-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2rem; }
+            .panel-left, .panel-right { padding: 1.5rem; }
+        }
     </style>
-    <!-- Load the QRCode.js library for generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
-    <!-- COLLAPSIBLE CONTENT CONTAINER (Hidden by default, set via max-height CSS) -->
-    <!-- The content is still high up in the DOM structure for AdSense crawler! -->
-    <div id="contentWrapper">
-        <section class="content-section">
-            <h2>QR Codes Made Simple</h2>
-            
-            <p>
-                Welcome to the No B.S. QR Code Generator. We created this tool for one simple reason: to give you a fast, reliable, and totally free way to create high-quality QR codes for any purpose, without the annoyance of sign-ups, email capture, or hidden features. Your time is valuable, and generating a QR code should take seconds, not require you to hand over your personal data.
-            </p>
-
-            <h3>How It Works: 3 Simple Steps</h3>
-            <p>
-                Generating your custom QR code is incredibly easy. Simply paste the full URL (e.g., `https://google.com`), a short block of text, or any contact information into the input field above. As you type or paste the content, our generator instantly creates the QR code in real-time. This process happens entirely within your browser for maximum speed and privacy.
-            </p>
-            <p>
-                Once the code appears, you can choose between the standard **Black on White** format (best for most print and digital uses) or the **White on Black** inverted format. Finally, select your desired download type—PNG for standard digital use, JPG for slightly smaller image size, or **EPS (Vector/SVG)** for professional printing and resizing without loss of quality.
-            </p>
-            
-            <h3>Popular QR Code Use Cases</h3>
-            <p>
-                QR codes have become essential tools for bridging the physical and digital worlds. Here are a few ways our users leverage their simple, fast-generated codes:
-            </p>
-            <ul class="list-disc list-inside space-y-2 text-gray-700">
-                <li>**Business Cards & Resumes:** Instantly link to your portfolio, LinkedIn profile, or contact information.</li>
-                <li>**Wi-Fi Access:** Generate a code that instantly connects guests to your home or office Wi-Fi network (using specialized text formats).</li>
-                <li>**Product Packaging:** Direct customers to product manuals, video tutorials, or registration forms.</li>
-                <li>**Marketing Materials:** Drive traffic from posters, flyers, and print ads directly to a specific landing page.</li>
-                <li>**Digital Payments:** Link codes directly to Venmo, PayPal, or crypto wallet addresses.</li>
-            </ul>
-
-            <h3>FAQ: Troubleshooting Your QR Codes</h3>
-            <p>
-                While our generator is reliable, here are common issues and quick tips to ensure your codes always scan perfectly:
-            </p>
-            <ul class="list-disc list-inside space-y-2 text-gray-700">
-                <li>**Why won't my code scan?** The most common reason is too much data (a very long URL). Use a URL shortener if possible. Also, ensure there is sufficient contrast (the quiet zone) around the code.</li>
-                <li>**What is the best file format?** For high-quality printing where resizing is required (e.g., posters), always use the **EPS (Vector/SVG)** option. For web and digital use, PNG is ideal.</li>
-                <li>**Does the color matter?** Most scanners require high contrast. While black and white is safest, if you use color, ensure the foreground color is much darker than the background color.</li>
-                <li>**What is the 'quiet zone'?** This is the mandatory white border around the QR code that allows the scanner to detect the edges. Do not crop it out!</li>
-            </ul>
-
-            <h3>Our "No B.S." Commitment</h3>
-            <p>
-                We adhere to a strict "No B.S." policy: **We do not track, store, or log the data you enter to generate your QR codes.** The entire generation process is handled locally by your browser. This site is entirely supported by advertising, which allows us to keep the service free and simple for everyone.
-            </p>
-        </section>
-    </div>
-
-    <!-- TOGGLE BUTTON - Placed just before the main tool for easy access -->
-    <div class="text-center w-full max-w-4xl mb-4">
-        <button id="toggleContentButton" onclick="toggleContent()" 
-            class="text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-semibold shadow-md">
-            Read Our Guide & FAQ (Show Content)
-        </button>
-    </div>
-
-    <!-- Main Design Card (The Tool) - This is now the main focus upon page load -->
-    <main class="design-card">
+    <!-- MAIN DASHBOARD CARD -->
+    <!-- Tool is compact and side-by-side on desktop to pull content up -->
+    <main class="dashboard-card">
         
-        <!-- Header Section -->
-        <header class="text-center mb-6">
-            <!-- NO B.S. Pill -->
-            <div class="inline-block btn-pill text-white text-sm font-bold uppercase py-1 px-4 rounded-full mb-3">
-                NO B.S.
+        <!-- Left Panel: Input & Branding -->
+        <div class="panel-left">
+            <div>
+                <span class="no-bs-badge">NO B.S.</span>
+                <h1>QR Code Generator</h1>
+                <p class="text-lg text-gray-600">The fastest, simplest, and most private way to generate codes instantly.</p>
             </div>
-            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
-                QR CODE GENERATOR
-            </h1>
-            <p class="mt-1 text-md text-gray-500 italic">
-                Because you should never need to create an account to make a simple QR Code.
-            </p>
-        </header>
 
-        <!-- Input Section -->
-        <div class="mb-8">
-            <label for="urlInput" class="block text-sm font-semibold mb-2 text-gray-700 uppercase text-center">
-                Enter Link:
-            </label>
-            <div class="flex flex-col sm:flex-row gap-3">
-                <input type="text" id="urlInput" placeholder="http://www.google.com/" value="http://www.google.com/"
-                       class="flex-grow design-input text-base"
+            <div class="input-group">
+                <input type="text" id="urlInput" placeholder="Enter URL, Email, or Phone..." value="http://www.google.com/"
+                       class="fancy-input"
                        oninput="debouncedGenerate()">
-                <button id="generateButton" onclick="generateQrCode()"
-                        class="btn-generate whitespace-nowrap disabled:opacity-50 transition-colors duration-200" disabled>
-                    Ready
-                </button>
-            </div>
-        </div>
-        
-        <!-- QR Codes Display Section -->
-        <div id="qrCodeDisplay" class="hidden">
-            <h2 class="text-xl font-bold text-gray-700 mb-6 text-center">QR Codes:</h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 
-                <!-- 1. Light Background Version -->
-                <div class="qr-preview-card light text-center">
-                    <h3 class="text-lg font-semibold text-gray-800">Light Background Version</h3>
-                    
-                    <div id="qrcode-white" class="qr-display-container"></div>
-                    
-                    <p class="text-sm font-medium text-gray-600 mb-4">Download:</p>
-
-                    <div class="qr-download-group">
-                        <button onclick="downloadCode('png', 'white')" class="btn-download-pill">PNG</button>
-                        <button onclick="downloadCode('jpg', 'white')" class="btn-download-pill">JPG</button>
-                        <button onclick="downloadCode('svg', 'white')" class="btn-download-pill">EPS (Vector)</button>
-                    </div>
-                </div>
-
-                <!-- 2. Dark Background Version -->
-                <div class="qr-preview-card dark text-center">
-                    <h3 class="text-lg font-semibold text-white">Dark Background Version</h3>
-                    
-                    <div id="qrcode-black" class="qr-display-container bg-black rounded"></div>
-                    
-                    <p class="text-sm font-medium text-gray-300 mb-4">Download:</p>
-                    
-                    <div class="qr-download-group">
-                        <button onclick="downloadCode('png', 'black')" class="btn-download-pill">PNG</button>
-                        <button onclick="downloadCode('jpg', 'black')" class="btn-download-pill">JPG</button>
-                        <button onclick="downloadCode('svg', 'black')" class="btn-download-pill">EPS (Vector)</button>
-                    </div>
+                <div id="statusIndicator" onclick="generateQrCode()" class="status-pill" data-status="ready">
+                    Ready
                 </div>
             </div>
+            
+            <div id="hintArea" class="mt-3 text-sm font-medium text-gray-500 h-6"></div>
         </div>
 
-        <!-- Message/Error Area -->
-        <div id="messageArea" class="mt-8 text-center text-sm font-medium text-gray-600">
-            <!-- Initial welcome message set by JS on load -->
-        </div>
+        <!-- Right Panel: The Visual Result -->
+        <div class="panel-right">
+            <div id="qrCodeDisplay" class="preview-grid hidden">
+                
+                <!-- Light Version -->
+                <div class="preview-card light">
+                    <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Standard</span>
+                    <div id="qrcode-white" class="qr-canvas-wrapper"></div>
+                    <button onclick="downloadCode('png', 'white')" class="download-btn">PNG</button>
+                    <button onclick="downloadCode('jpg', 'white')" class="download-btn">JPG</button>
+                    <button onclick="downloadCode('svg', 'white')" class="download-btn">Vector (SVG)</button>
+                </div>
 
+                <!-- Dark Version -->
+                <div class="preview-card dark">
+                    <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Dark Mode</span>
+                    <div id="qrcode-black" class="qr-canvas-wrapper bg-black"></div>
+                    <button onclick="downloadCode('png', 'black')" class="download-btn">PNG</button>
+                    <button onclick="downloadCode('jpg', 'black')" class="download-btn">JPG</button>
+                    <button onclick="downloadCode('svg', 'black')" class="download-btn">Vector (SVG)</button>
+                </div>
+
+            </div>
+            <div id="messageArea" class="text-center text-sm text-gray-500 mt-4 hidden"></div>
+        </div>
     </main>
-    
-    <!-- Footer (MANDATORY for AdSense approval) -->
-    <footer class="mt-8 py-6 text-center text-white text-sm w-full max-w-4xl">
-        <p class="mb-2">&copy; 2025 No B.S. QR Code Generator. All rights reserved.</p>
-        <div class="space-x-4">
-            <!-- Ensure these links are live and work! -->
-            <a href="privacy_policy.html" class="underline hover:text-gray-300 transition-colors duration-200">Privacy Policy</a>
-            <a href="terms_of_service.html" class="underline hover:text-gray-300 transition-colors duration-200">Terms of Service</a>
+
+    <!-- CONTENT GRID (Visible immediately below tool) -->
+    <!-- Styled as feature cards, but contains the rich text AdSense needs -->
+    <section class="content-grid">
+        
+        <!-- Card 1: The Mission -->
+        <article class="feature-card">
+            <h3>Why Use No B.S. QR?</h3>
+            <p>
+                We built this tool because most QR generators are annoying. They ask for your email, force you to sign up, or break your codes after a "free trial."
+            </p>
+            <p><strong>We don't do that.</strong> This tool runs entirely in your browser. We don't see your data, we don't track your links, and we don't charge you.</p>
+        </article>
+
+        <!-- Card 2: Use Cases -->
+        <article class="feature-card">
+            <h3>Popular Use Cases</h3>
+            <ul>
+                <li><strong>Business Cards:</strong> Link to your portfolio or LinkedIn.</li>
+                <li><strong>Wi-Fi Access:</strong> Let guests connect instantly.</li>
+                <li><strong>Packaging:</strong> Link to manuals or videos.</li>
+                <li><strong>Events:</strong> Check-ins and digital tickets.</li>
+            </ul>
+        </article>
+
+        <!-- Card 3: FAQ / Tech Specs -->
+        <article class="feature-card">
+            <h3>Troubleshooting & Tips</h3>
+            <ul>
+                <li><strong>Scanning Issues?</strong> Your URL might be too long. Try shortening it first.</li>
+                <li><strong>Privacy?</strong> 100% Client-side. Data never leaves your device.</li>
+                <li><strong>Format?</strong> Use PNG for web, EPS/Vector for professional print.</li>
+            </ul>
+        </article>
+
+    </section>
+
+    <footer>
+        <p>&copy; 2025 No B.S. QR Code Generator.</p>
+        <div class="mt-2">
+            <a href="privacy_policy.html">Privacy Policy</a> &nbsp;|&nbsp; 
+            <a href="terms_of_service.html">Terms of Service</a>
         </div>
     </footer>
 
-
     <script>
-        // Global variables for QR code instances
-        let qrCodeWhite = null;
-        let qrCodeBlack = null;
-        // Updated constant for QR code dimension: 1000 pixels for high-quality downloads.
+        // Constants & Elements
         const QR_DIMENSION = 1000; 
-
-        const generateButton = document.getElementById('generateButton');
+        const statusIndicator = document.getElementById('statusIndicator');
         const messageArea = document.getElementById('messageArea');
+        const hintArea = document.getElementById('hintArea');
         const displaySection = document.getElementById('qrCodeDisplay');
         const qrWhiteDiv = document.getElementById('qrcode-white');
         const qrBlackDiv = document.getElementById('qrcode-black');
+        let qrCodeWhite = null;
+        let qrCodeBlack = null;
 
-        /**
-         * Toggles the visibility of the content wrapper for the FAQ/Guide section.
-         * Uses CSS max-height transition for a smooth visual effect.
-         */
-        function toggleContent() {
-            const wrapper = document.getElementById('contentWrapper');
-            const button = document.getElementById('toggleContentButton');
-            
-            if (wrapper.classList.contains('is-open')) {
-                // Hide content
-                wrapper.classList.remove('is-open');
-                button.textContent = 'Read Our Guide & FAQ (Show Content)';
-            } else {
-                // Show content
-                wrapper.classList.add('is-open');
-                button.textContent = 'Hide Guide & FAQ';
+        // UI Helpers
+        function setStatus(text, status) {
+            statusIndicator.textContent = text;
+            if (status === 'processing') {
+                statusIndicator.classList.remove('ready');
+                statusIndicator.style.opacity = '0.5';
+            } else if (status === 'ready') {
+                statusIndicator.classList.add('ready');
+                statusIndicator.style.opacity = '1';
             }
         }
 
-
-        /**
-         * Debounce function to limit how often generateQrCode is called while typing.
-         * It also updates the button state to indicate processing is happening.
-         */
-        const debounce = (func, delay) => {
-            let timeoutId;
-            return function(...args) {
-                // IMMEDIATE ACTION: User is typing, show generating/processing status
-                generateButton.disabled = true;
-                generateButton.textContent = 'Processing...';
-
-                clearTimeout(timeoutId);
-                timeoutId = setTimeout(() => {
-                    func.apply(this, args);
-                }, delay);
-            };
-        };
-
-        // Helper to update the message box style
-        function updateMessage(text, isError = false) {
-            messageArea.textContent = isError ? 'Error: ' + text : text;
-            messageArea.style.color = isError ? '#dc2626' : '#4b5563'; // Tailwind Red-600 vs Gray-600
+        function updateHint(text) {
+            hintArea.innerHTML = text;
         }
 
-        function validateInput(url) {
-            return url && url.trim().length > 3;
+        // Logic Helpers
+        function validateInput(content) {
+            return content && content.trim().length > 0;
         }
 
-        // Main function to generate the QR codes
+        function formatContent(rawContent) {
+            const content = rawContent.trim();
+            let finalContent = content;
+            let hint = '';
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneRegex = /^(?:\+?\d{1,3}[\s-]?)?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}$/;
+            const normalizedPhone = content.replace(/[\s()-]/g, ''); 
+
+            if (content.toLowerCase().startsWith('http') || content.toLowerCase().startsWith('www.') || content.toLowerCase().startsWith('mailto:') || content.toLowerCase().startsWith('tel:')) {
+                hint = 'Format: Standard Link/Text';
+            } else if (emailRegex.test(content)) {
+                finalContent = `mailto:${content}`;
+                hint = 'Detected: <strong>Email</strong> (Auto-formatted to mailto:)';
+            } else if (normalizedPhone.length >= 10 && phoneRegex.test(normalizedPhone)) {
+                finalContent = `tel:${normalizedPhone}`;
+                hint = 'Detected: <strong>Phone</strong> (Auto-formatted to tel:)';
+            } else {
+                hint = 'Format: Plain Text / URL';
+            }
+            return { content: finalContent, hint: hint };
+        }
+
+        // Core Generation
         function generateQrCode() {
             const urlInput = document.getElementById('urlInput');
-            const url = urlInput.value.trim();
+            const rawContent = urlInput.value.trim();
 
-            if (!validateInput(url)) {
-                // This branch should ideally only be hit if debouncedGenerate was bypassed
-                updateMessage('Please enter a valid link or text to generate.', true);
+            if (!validateInput(rawContent)) {
                 displaySection.classList.add('hidden');
-                generateButton.disabled = true;
-                generateButton.textContent = 'Enter Content';
+                setStatus('Empty', 'invalid');
+                updateHint('Start typing to generate...');
                 return;
             }
 
-            updateMessage('QR Codes generated successfully. Choose your download format.');
+            const { content: finalContent, hint: contentHint } = formatContent(rawContent);
+            updateHint(contentHint);
 
-            // Reset previous instances and containers
             if (qrCodeWhite) qrCodeWhite.clear();
             if (qrCodeBlack) qrCodeBlack.clear();
             qrWhiteDiv.innerHTML = '';
             qrBlackDiv.innerHTML = '';
-            
-            // 1. QR Code on White Background (Standard Contrast)
-            qrCodeWhite = new QRCode(qrWhiteDiv, {
-                text: url,
-                width: QR_DIMENSION, 
-                height: QR_DIMENSION, 
-                colorDark : "#000000", // Black dots
-                colorLight : "#ffffff", // White background
-                correctLevel : QRCode.CorrectLevel.H
-            });
 
-            // 2. QR Code on Black Background (Inverted/Reverse Contrast)
-            qrCodeBlack = new QRCode(qrBlackDiv, {
-                text: url,
-                width: QR_DIMENSION, 
-                height: QR_DIMENSION, 
-                colorDark : "#ffffff", // White dots
-                colorLight : "#000000", // Black background
-                correctLevel : QRCode.CorrectLevel.H
-            });
+            try {
+                qrCodeWhite = new QRCode(qrWhiteDiv, {
+                    text: finalContent,
+                    width: QR_DIMENSION,
+                    height: QR_DIMENSION,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
 
-            // Display the results and update button state after generation
-            displaySection.classList.remove('hidden');
-            generateButton.disabled = false;
-            generateButton.textContent = 'Ready';
+                qrCodeBlack = new QRCode(qrBlackDiv, {
+                    text: finalContent,
+                    width: QR_DIMENSION,
+                    height: QR_DIMENSION,
+                    colorDark : "#ffffff",
+                    colorLight : "#000000",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+
+                displaySection.classList.remove('hidden');
+                setStatus('Ready', 'ready');
+            } catch (e) {
+                console.error(e);
+                setStatus('Error', 'invalid');
+            }
         }
 
-        // Debounced function called on input change
-        const debouncedGenerate = debounce(() => {
-            const url = document.getElementById('urlInput').value.trim();
-            if (validateInput(url)) {
-                // If input is valid, proceed to generation
-                generateQrCode(); 
+        // Debounce
+        let timeoutId;
+        const debouncedGenerate = () => {
+            const val = document.getElementById('urlInput').value.trim();
+            if(val.length > 0) {
+                setStatus('Working...', 'processing');
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => { generateQrCode(); }, 500);
             } else {
-                // If input is invalid, set button state immediately to reflect need for input
-                generateButton.disabled = true;
-                generateButton.textContent = 'Enter Content'; 
-                displaySection.classList.add('hidden');
-                updateMessage('Enter your URL or text above to generate your custom QR code.', false);
+                generateQrCode(); 
             }
-        }, 500); // Wait 500ms after user stops typing
+        };
 
-        /**
-         * Utility function to convert a Data URL (base64 image data) into a Blob object.
-         * This is necessary to use URL.createObjectURL() for more reliable downloads.
-         */
+        // Download Logic
+        function downloadFile(dataUrl, filename, revokeUrl = false) {
+            const a = document.createElement('a');
+            a.href = dataUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            if (revokeUrl) URL.revokeObjectURL(dataUrl); 
+        }
+
         function dataURLtoBlob(dataurl) {
             const parts = dataurl.split(',');
             const mime = parts[0].match(/:(.*?);/)[1];
             const bstr = atob(parts[1]);
             let n = bstr.length;
             const u8arr = new Uint8Array(n);
-            while(n--){
-                u8arr[n] = bstr.charCodeAt(n);
-            }
+            while(n--){ u8arr[n] = bstr.charCodeAt(n); }
             return new Blob([u8arr], {type:mime});
         }
 
-
-        /**
-         * Utility function to trigger the download.
-         */
-        function downloadFile(dataUrl, filename, revokeUrl = false) {
-            console.log(`Attempting to download: ${filename}`); 
-            const a = document.createElement('a');
-            a.href = dataUrl;
-            a.download = filename;
-            document.body.appendChild(a);
-            
-            // Trigger the click
-            a.click();
-            document.body.removeChild(a);
-
-            if (revokeUrl) {
-                // IMPORTANT: Revoke temporary URL created from Blob to prevent memory leaks
-                URL.revokeObjectURL(dataUrl); 
-            }
-        }
-
-        /**
-         * Generates an SVG string based on the data in the QR code's canvas.
-         */
-        function generateSvgData(type) {
-            const qrDiv = document.getElementById(`qrcode-${type}`);
-            const canvas = qrDiv.querySelector('canvas');
-
-            if (!canvas) {
-                updateMessage('Canvas element not found. Please generate the QR code first.', true);
-                return null;
-            }
-
-            const ctx = canvas.getContext('2d');
-            const size = canvas.width;
-            const imageData = ctx.getImageData(0, 0, size, size); 
-            const data = imageData.data;
-            
-            // Determine colors for the output SVG
-            const darkColor = type === 'white' ? '#000000' : '#FFFFFF';
-            const lightColor = type === 'white' ? '#FFFFFF' : '#000000';
-
-            const moduleSize = 1; 
-            let svgRects = [];
-            
-            // Iterate over all pixels (modules)
-            for (let y = 0; y < size; y += moduleSize) {
-                for (let x = 0; x < size; x += moduleSize) {
-                    const index = (y * size + x) * 4;
-                    // Check if the pixel is dark
-                    const isDark = data[index] < 128; 
-                    
-                    if (isDark) {
-                        // Draw a rectangle using the appropriate 'dark' color
-                        svgRects.push(`<rect x="${x}" y="${y}" width="${moduleSize}" height="${moduleSize}" fill="${darkColor}" />`);
-                    }
-                }
-            }
-            
-            // Build the final SVG string
-            const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="100%" height="100%" style="background-color: ${lightColor};">
-                ${svgRects.join('\n')}
-            </svg>`;
-            
-            return svgString;
-        }
-
-        /**
-         * Function to handle image (PNG/JPG) and vector (SVG/EPS) downloads.
-         */
         function downloadCode(format, type) {
-            const url = document.getElementById('urlInput').value.trim();
-            if (!validateInput(url)) {
-                updateMessage('Cannot export empty content. Please generate a QR code first.', true);
-                return;
-            }
-
-            // Create a clean filename
-            const baseFilename = type + '-qrcode-' + url.substring(0, 15).replace(/[^a-zA-Z0-9]/g, '_');
+            const rawContent = document.getElementById('urlInput').value.trim();
+            if (!validateInput(rawContent)) return;
+            
+            const cleanName = rawContent.substring(0, 10).replace(/[^a-zA-Z0-9]/g, '_') || 'qrcode';
+            const filename = `${type}-qr-${cleanName}`;
 
             if (format === 'svg') {
-                // SVG (Vector) Logic - Always high quality and resolution independent
-                const svgString = generateSvgData(type);
-                if (svgString) {
-                    const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-                    const dataUrl = URL.createObjectURL(blob);
-                    downloadFile(dataUrl, baseFilename + '.svg', true); 
-                    updateMessage(`${type.toUpperCase()} EPS/Vector Export Successful.`, false);
-                }
-            } else {
-                // PNG/JPG Logic - Uses the 1000x1000 canvas resolution
                 const qrDiv = document.getElementById(`qrcode-${type}`);
-                const canvasElement = qrDiv.querySelector('canvas'); 
-
-                if (canvasElement) {
-                    let mimeType = format === 'png' ? 'image/png' : 'image/jpeg';
-                    let extension = format === 'png' ? '.png' : '.jpg';
-                    
-                    // 1. Get the Data URL from the canvas (now 1000x1000)
-                    const dataUrl = canvasElement.toDataURL(mimeType, format === 'jpg' ? 0.9 : 1.0);
-                    
-                    // 2. Convert Data URL to a safe Blob object
-                    const blob = dataURLtoBlob(dataUrl);
-
-                    // 3. Create a safe Object URL from the Blob
-                    const objectUrl = URL.createObjectURL(blob);
-
-                    // 4. Trigger download and ensure the temporary URL is revoked
-                    downloadFile(objectUrl, baseFilename + extension, true); 
-                    updateMessage(`${type.toUpperCase()} ${format.toUpperCase()} Export Successful.`, false);
-
-                } else {
-                    console.error(`Download error: Canvas not found for type ${type} and format ${format}.`);
-                    updateMessage(`Failed to find QR code image. Please click 'Generate' first.`, true);
+                const canvas = qrDiv.querySelector('canvas');
+                if(!canvas) return;
+                
+                const size = canvas.width;
+                const ctx = canvas.getContext('2d');
+                const data = ctx.getImageData(0, 0, size, size).data;
+                const dark = type === 'white' ? '#000000' : '#FFFFFF';
+                const light = type === 'white' ? '#FFFFFF' : '#000000';
+                
+                let rects = [];
+                for(let y=0; y<size; y++) {
+                    for(let x=0; x<size; x++) {
+                        if(data[(y*size+x)*4] < 128) {
+                            rects.push(`<rect x="${x}" y="${y}" width="1" height="1" fill="${dark}" />`);
+                        }
+                    }
                 }
+                const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" style="background:${light}">${rects.join('')}</svg>`;
+                const blob = new Blob([svg], {type: 'image/svg+xml'});
+                downloadFile(URL.createObjectURL(blob), filename + '.svg', true);
+            } else {
+                const canvas = document.getElementById(`qrcode-${type}`).querySelector('canvas');
+                if(!canvas) return;
+                const mime = format === 'png' ? 'image/png' : 'image/jpeg';
+                const dataUrl = canvas.toDataURL(mime, 1.0);
+                const blob = dataURLtoBlob(dataUrl);
+                downloadFile(URL.createObjectURL(blob), filename + '.' + format, true);
             }
         }
 
-        // Initialize the app on load
         window.onload = function() {
-            // Set initial value as per the image for a quick start
             document.getElementById('urlInput').value = 'http://www.google.com/';
-            
-            // Automatically generate the initial QR code and enable the button
-            // The debouncedGenerate function will now handle setting the button text to 'Ready'
-            debouncedGenerate(); 
+            debouncedGenerate();
         };
-
     </script>
 </body>
 </html>
