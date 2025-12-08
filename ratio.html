@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuroHue | Aspect Ratio Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root { --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --glass-bg: rgba(255, 255, 255, 0.92); --accent-color: #764ba2;}
+        body { 
+            background-color: #0d1117; 
+            font-family: 'Roboto', sans-serif; 
+            min-height: 100vh; 
+            padding: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+        .tool-wrapper {
+            background-image: var(--bg-gradient);
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .main-nav { 
+            width: 100%; max-width: 1100px; margin-bottom: 2rem; background: rgba(255, 255, 255, 0.1); padding: 0.5rem; border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.2); 
+            display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; backdrop-filter: blur(10px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .main-nav a { 
+            color: white; text-decoration: none; font-weight: 600; padding: 0.6rem 1.25rem; border-radius: 9999px; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-size: 0.95rem; letter-spacing: 0.02em; 
+        }
+        .main-nav a:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+        .main-nav a.active { background: white; color: var(--accent-color); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); transform: translateY(-1px); }
+        .tool-card { background: var(--glass-bg); border-radius: 24px; padding: 3rem; width: 100%; max-width: 800px; text-align: center; box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15); border: 1px solid rgba(255, 255, 255, 0.4);}
+        h1.tool-title { font-size: 2.5rem; font-weight: 900; background: -webkit-linear-gradient(#667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 2rem;}
+        input { 
+            border: 2px solid #e2e8f0; padding: 1rem; border-radius: 12px; width: 100%; font-size: 1.2rem; 
+            text-align: center; margin-bottom: 1rem; background: white;
+            transition: border-color 0.2s;
+        }
+        input:focus { border-color: var(--accent-color); outline: none; box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1); }
+
+        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; align-items: center;}
+        
+        .section-divider {
+            margin: 2.5rem 0;
+            border-top: 2px dashed #cbd5e0;
+            padding-top: 2.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .calc-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .tool-card { padding: 1.5rem; }
+            h1.tool-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- GLOBAL APPLICATION HEADER (AuroHue) -->
+    <div class="w-full pt-8 pb-4 px-4 bg-gray-900/90 backdrop-blur-md shadow-2xl rounded-b-3xl">
+        <div class="text-center max-w-7xl mx-auto">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-pink-400 to-amber-300 tracking-tight leading-tight mb-1">
+                AuroHue
+            </h1>
+            <p class="text-base sm:text-lg font-light text-gray-400 italic">
+                a designer's toolbox
+            </p>
+        </div>
+    </div>
+
+    <div class="tool-wrapper">
+        <header class="main-nav">
+            <a href="index.html">QR Generator</a>
+            <a href="colors.html">Color Palette</a>
+            <a href="ipsum.html">Lorem Ipsum</a>
+            <a href="ratio.html" class="active">Aspect Ratio</a>
+            <a href="guide.html">Guide</a>
+            <a href="faq.html">FAQ</a>
+        </header>
+
+        <main class="tool-card">
+            <h1 class="tool-title">Aspect Ratio Calculator</h1>
+            <p class="text-gray-600">Calculate the simple ratio between two dimensions, then scale to a new size.</p>
+            
+            <div class="section-divider">
+                <h2 class="text-xl font-bold text-gray-700 mb-4">1. Define Your Original Ratio</h2>
+                <div class="calc-grid">
+                    <div>
+                        <label class="font-bold block mb-2 text-gray-700">Original Width (W1)</label>
+                        <input type="number" id="w1" placeholder="e.g., 1920" oninput="calculate()">
+                    </div>
+                    <div>
+                        <label class="font-bold block mb-2 text-gray-700">Original Height (H1)</label>
+                        <input type="number" id="h1" placeholder="e.g., 1080" oninput="calculate()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="my-4 text-3xl font-extrabold text-purple-700 tracking-wider">
+                Aspect Ratio: <span id="ratioResult">-- : --</span>
+            </div>
+
+            <div class="section-divider">
+                <h2 class="text-xl font-bold text-gray-700 mb-4">2. Scale to New Dimensions</h2>
+                 <div class="calc-grid">
+                    <div>
+                        <label class="font-bold block mb-2 text-gray-700">New Width (W2)</label>
+                        <input type="number" id="w2" placeholder="Enter W2 to get H2" oninput="calcNewHeight()">
+                    </div>
+                    <div>
+                        <label class="font-bold block mb-2 text-gray-700">New Height (H2)</label>
+                        <input type="number" id="h2" placeholder="Enter H2 to get W2" oninput="calcNewWidth()">
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Finds the Greatest Common Divisor (GCD) for simplifying the ratio
+        function gcd(a, b) {
+            return b ? gcd(b, a % b) : a;
+        }
+
+        // Calculates the simple Aspect Ratio (e.g., 16:9)
+        function calculate() {
+            const w = parseInt(document.getElementById('w1').value);
+            const h = parseInt(document.getElementById('h1').value);
+            const ratioResult = document.getElementById('ratioResult');
+
+            // Clear scaling inputs whenever original ratio changes
+            document.getElementById('w2').value = '';
+            document.getElementById('h2').value = '';
+
+            if (w > 0 && h > 0) {
+                const r = gcd(w, h);
+                ratioResult.innerText = `${w/r}:${h/r}`;
+            } else {
+                ratioResult.innerText = '-- : --';
+            }
+        }
+
+        // Calculates the required Height based on W1, H1, and New Width (W2)
+        function calcNewHeight() {
+            const w1 = parseInt(document.getElementById('w1').value);
+            const h1 = parseInt(document.getElementById('h1').value);
+            const w2 = parseInt(document.getElementById('w2').value);
+            
+            // Clear the other scaling input to avoid conflict
+            document.getElementById('h2').value = '';
+
+            if (w1 > 0 && h1 > 0 && w2 > 0) {
+                // H2 = (H1 / W1) * W2
+                document.getElementById('h2').value = Math.round((h1 / w1) * w2);
+            } else {
+                document.getElementById('h2').value = '';
+            }
+        }
+        
+        // Calculates the required Width based on W1, H1, and New Height (H2)
+        function calcNewWidth() {
+            const w1 = parseInt(document.getElementById('w1').value);
+            const h1 = parseInt(document.getElementById('h1').value);
+            const h2 = parseInt(document.getElementById('h2').value);
+            
+            // Clear the other scaling input to avoid conflict
+            document.getElementById('w2').value = '';
+
+            if (w1 > 0 && h1 > 0 && h2 > 0) {
+                // W2 = (W1 / H1) * H2
+                document.getElementById('w2').value = Math.round((w1 / h1) * h2);
+            } else {
+                document.getElementById('w2').value = '';
+            }
+        }
+    </script>
+</body>
+</html>
